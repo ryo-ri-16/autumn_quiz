@@ -1,1 +1,25 @@
-秋の漢字クイズへようこそ
+<div class="text-center">
+  <h1>秋の漢字クイズへようこそ</h1>
+</div>
+
+<div class="container mt-4">
+  <h2>どっちを選ぶ?</h2>
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <div class="card text-center">
+        <div class="card-body">
+          <h4 class="card-title">易しい</h4>
+          <%= link_to "挑戦する", problems_path(difficulty: "easy"), class: "btn btn-success btn-lg" %>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 mb-3">
+      <div class="card text-center">
+        <div class="card-body">
+          <h4 class="card-title">難しい</h4>
+          <%= link_to "挑戦する", problems_path(difficulty: "hard"), class: "btn btn-danger btn-lg" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
