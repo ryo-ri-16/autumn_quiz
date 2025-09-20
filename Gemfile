@@ -54,6 +54,9 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+  gem "faker"           # ダミーデータ生成
+  gem "factory_bot_rails" # テストデータ作成
+  gem "rspec-rails"     # テストフレームワーク
 end
 
 group :test do
