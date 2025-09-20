@@ -1,0 +1,25 @@
+<div class="container mt-4">
+  <h2>漢字問題一覧</h2>
+  <div class="row">
+    <% @problems.each do |problem| %>
+      <div class="col-md-4 mb-3">
+        <div class="card text-center">
+          <div class="card-body">
+            <h4 class="card-title"><%= problem.kanji %></h4>
+            <p class="card-text"><%= problem.meaning %></p>
+
+            <%= form_with url: answer_problem_path(problem), method: :post, local: true do |form| %>
+              <div class="mb-3">
+                <%= form.text_field :answer,
+                      placeholder: "ひらがなで入力してください",
+                      class: "form-control form-control-lg text-center",
+                      autocomplete: "off" %>
+              </div>
+              <%= form.submit "回答する", class: "btn btn-primary btn-lg" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
