@@ -12,24 +12,24 @@
 # Configure Using Gemfile
 # gem "pg"
 #
-default: &default
-  adapter: postgresql
-  encoding: unicode
+#default: &default
+#  adapter: postgresql
+#  encoding: unicode
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+#  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 
-development:
-  <<: *default
-  database: autumn_quiz_development
-  username: postgres
-  host: localhost
-  port: 5432
+#development:
+#  <<: *default
+#  database: autumn_quiz_development
+#  username: postgres
+#  host: localhost
+#  port: 5432
 
-test:
-  <<: *default
-  database: autumn_quiz_test
+#test:
+#  <<: *default
+#  database: autumn_quiz_test
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -51,9 +51,40 @@ test:
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
 #
+#production:
+#  url: <%= ENV['DATABASE_URL'] %>
+
+#cable:
+#  production:
+#    url: <%= ENV['DATABASE_URL'] %>
+
+# config/database.yml
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: autumn_quiz_development
+  username: <%= ENV.fetch("DEV_DB_USERNAME") { "postgres" } %>
+  password: <%= ENV.fetch("DEV_DB_PASSWORD") { "password" } %>
+  host: localhost
+  port: 5432
+
+test:
+  <<: *default
+  database: autumn_quiz_test
+  username: <%= ENV.fetch("TEST_DB_USERNAME") { "postgres" } %>
+  password: <%= ENV.fetch("TEST_DB_PASSWORD") { "password" } %>
+  host: localhost
+  port: 5432
+
 production:
+  <<: *default
   url: <%= ENV['DATABASE_URL'] %>
 
 cable:
   production:
+    <<: *default
     url: <%= ENV['DATABASE_URL'] %>
