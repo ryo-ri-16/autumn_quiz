@@ -1,21 +1,21 @@
+version: "3.9"
 services:
   web:
+    build: .
     environment:
       RAILS_ENV: production
-      SECRET_KEY_BASE: "a7f3c9d2b1e5f6a8c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8g9h0i1j2k3l4m5n6"
-    build: .
-    command: bash -c "rails new my_awesome_app --database=postgresql --skip-git || bundle exec rails server -b 0.0.0.0"
-    volumes:
-      - .:/myapp
+      DATABASE_URL: postgres://postgres:password@db:5432/autumn_quiz_production
     ports:
       - "3000:3000"
     depends_on:
       - db
-  
+
   db:
     image: postgres:15
     environment:
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
+      POSTGRES_DB: autumn_quiz_production
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
