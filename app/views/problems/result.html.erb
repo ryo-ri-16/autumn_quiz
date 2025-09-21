@@ -1,10 +1,54 @@
-<div class="container mt-4 text-center">
-  <% if flash[:notice] %>
-    <div class="alert alert-success"><%= flash[:notice] %></div>
-  <% elsif flash[:alert] %>
-    <div class="alert alert-danger"><%= flash[:alert] %></div>
-  <% end %>
+<div class="container mt-4">
+  <h2>結果発表</h2>
 
-  <%= link_to "一覧に戻る", problems_path, class: "btn btn-secondary" %>
-  <%= link_to "もう一度挑戦", problems_path, class: "btn btn-primary" %>
+  <% if @results.any? %>
+    <div class="row">
+      <% @results.each do |result| %>
+        <div class="col-md-6 mb-3">
+          <div class="card <%= result[:correct] || result['correct'] ? 'border-success' : 'border-danger' %>">
+            <div class="card-body text-center">
+              <%
+                problem_id = result[:problem_id] || result['problem_id']
+                problem = Problem.find_by(id: problem_id)
+                user_answer = result[:user_answer] || result['user_answer']
+                correct = result[:correct] || result['correct']
+              %>
+              <% if problem %>
+                <h4><%= problem.kanji %></h4>
+                <p class="text-muted">意味: <%= problem.meaning %></p>
+
+                <div class="mt-3">
+                  <p><strong>あなたの回答:</strong> <%= user_answer %></p>
+                  <p><strong>正解:</strong> <%= problem.reading %></p>
+                </div>
+
+                <% if correct %>
+                  <span class="badge bg-success fs-6">正解！</span>
+                <% else %>
+                  <span class="badge bg-danger fs-6">不正解</span>
+                <% end %>
+              <% else %>
+                <p class="text-danger">問題データが見つかりません（ID: <%= problem_id %>）</p>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="text-center mt-4">
+      <%
+        correct_count = @results.count { |r| r[:correct] || r['correct'] }
+        total_count = @results.size
+      %>
+      <h3>結果: <%= correct_count %>/<%= total_count %>問正解！</h3>
+      <%= link_to "トップに戻る", root_path, class: "btn btn-primary btn-lg" %>
+    </div>
+  <% else %>
+    <div class="alert alert-warning text-center">
+      <h4>結果データが見つかりませんでした</h4>
+      <p>もう一度お試しください。</p>
+      <%= link_to "トップに戻る", root_path, class: "btn btn-primary" %>
+    </div>
+  <% end %>
 </div>

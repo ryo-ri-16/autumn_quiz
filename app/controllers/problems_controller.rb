@@ -1,33 +1,42 @@
 class ProblemsController < ApplicationController
   def home
   end
-  def index
-    if params[:difficulty].present?
-      @problems = Problem.where(difficulty: params[:difficulty])
-      @difficulty = params[:difficulty]
-    else
-      @problems = Problem.all
-    end
-  end
 
-  def show
-    @problem = Problem.find(params[:id])
+  def index
+    count = params[:count].to_i.presence || 5
+    @problems = Problem.all
+    @problems = @problems.where(difficulty: params[:difficulty]) if params[:difficulty].present?
+    @problems = @problems.order("RANDOM()").limit(count)
   end
 
   def answer
-    @problem = Problem.find(params[:id])
-    user_answer = params[:answer].to_s.strip
+    results = []
 
-    if user_answer == @problem.reading
-      flash[:notice] = "正解!"
-    else
-      flash[:alert] = "不正解 正解は#{@problem.reading}"
+    if params[:answers].present?
+      params[:answers].each do |problem_id, answer_data|
+        problem = Problem.find_by(id: problem_id.to_i)
+        next unless problem
+
+        user_answer = answer_data[:user_answer].to_s.strip
+        correct = (user_answer == problem.reading)
+
+        results << {
+          problem_id: problem.id,
+          user_answer: user_answer,
+          correct: correct
+        }
+      end
     end
 
-    redirect_to result_problem_path(@problem)
+    session[:results] = results
+    redirect_to result_problems_path
   end
 
   def result
-    @problem = Problem.find(params[:id])
+    @results = session.delete(:results) || []
+    @results = @results.map do |r|
+      problem = Problem.find_by(id: r[:problem_id])
+      r.merge(problem: problem)
+    end
   end
 end
