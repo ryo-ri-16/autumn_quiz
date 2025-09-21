@@ -1,5 +1,5 @@
 <div class="container mt-4" data-turbo="false">
-  <h2>漢字読み問題</h2>
+  <h2 class="text-center">漢字読み問題</h2>
 
   <%= form_with url: answer_problems_path, method: :post, local: true, data: { turbo: false } do %>
     <% @problems.each do |problem| %>

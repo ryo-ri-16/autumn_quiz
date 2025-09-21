@@ -1,8 +1,8 @@
-<div class="text-center">
+<div class="text-center mb-4">
   <h1>秋の漢字クイズへようこそ!</h1>
 </div>
 
-<div class="container mt-4">
+<div class="container mt-6">
   <h2>どれを選ぶ?</h2>
   <div class="row">
     <% [["易しい", "easy", "success"],
@@ -12,7 +12,7 @@
         <div class="card text-center">
           <div class="card-body">
             <h4 class="card-title"><%= title %></h4>
-            <div class="d-flex justify-content-center gap-2">
+            <div class="d-flex justify-content-center gap-5">
               <%= link_to "3問", problems_path(difficulty: diff, count: 3),
                           class: "btn btn-#{color}" %>
               <%= link_to "5問", problems_path(difficulty: diff, count: 5),
