@@ -59,41 +59,42 @@
 #    url: <%= ENV['DATABASE_URL'] %>
 
 # config/database.yml
+# config/database.yml
+
 default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
 
 development:
   <<: *default
-  database: autumn_quiz_development
-  username: <%= ENV.fetch("DEV_DB_USERNAME") { "postgres" } %>
-  password: <%= ENV.fetch("DEV_DB_PASSWORD") { "password" } %>
-  host: localhost
-  port: 5432
+  database: myapp_development
+  username: <%= ENV['DEV_DB_USERNAME'] || 'postgres' %>
+  password: <%= ENV['DEV_DB_PASSWORD'] || '' %>
+  host: <%= ENV['DEV_DB_HOST'] || 'localhost' %>
 
 test:
   <<: *default
-  database: autumn_quiz_test
-  username: <%= ENV.fetch("TEST_DB_USERNAME") { "postgres" } %>
-  password: <%= ENV.fetch("TEST_DB_PASSWORD") { "password" } %>
-  host: localhost
-  port: 5432
+  database: myapp_test
+  username: <%= ENV['TEST_DB_USERNAME'] || 'postgres' %>
+  password: <%= ENV['TEST_DB_PASSWORD'] || '' %>
+  host: <%= ENV['TEST_DB_HOST'] || 'localhost' %>
 
 production:
-  primary:
-    <<: *default
-    database: myapp_production
-  cache:
-    <<: *default
-    database: myapp_cache_production
+  <<: *default
+  # Render が提供する DATABASE_URL を使用
+  url: <%= ENV['DATABASE_URL'] %>
+
+# SolidQueue / SolidCache 用の DB 接続も production に追加
+queue:
+  <<: *default
+  url: <%= ENV['QUEUE_DATABASE_URL'] || ENV['DATABASE_URL'] %>
+
+cache:
+  <<: *default
+  url: <%= ENV['CACHE_DATABASE_URL'] || ENV['DATABASE_URL'] %>
 
 cable:
-  production:
-    <<: *default
-    url: <%= ENV['DATABASE_URL'] %>
-
-queue:
-  production:
-    <<: *default
-    url: <%= ENV['DATABASE_URL'] %>
+  <<: *default
+  url: <%= ENV['CABLE_DATABASE_URL'] || ENV['DATABASE_URL'] %>
