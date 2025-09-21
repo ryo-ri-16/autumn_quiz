@@ -81,8 +81,12 @@ test:
   port: 5432
 
 production:
-  <<: *default
-  url: <%= ENV['DATABASE_URL'] %>
+  primary:
+    <<: *default
+    database: myapp_production
+  cache:
+    <<: *default
+    database: myapp_cache_production
 
 cable:
   production:
